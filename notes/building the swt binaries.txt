@@ -1,0 +1,33 @@
+Building the SWT binaries
+-------------------------
+
+- See https://github.com/eclipse-platform/eclipse.platform.swt/discussions/1065#discussioncomment-8617014
+- And https://github.com/eclipse-platform/eclipse.platform.swt/pull/973
+
+
+TL;DR:
+
+1. cd eclipse.platform.swt
+2. mvn clean process-resources -pl org.eclipse.swt:org.eclipse.swt.cocoa.macosx.aarch64 -am -Dnative=cocoa.macosx.aarch64 -DskipTests
+
+
+
+Note from that first post:
+
+"A prerequisite for building the binaries is to have an swtBuildQualifier.txt in bundles\org.eclipse.swt\target,
+which is created by simply running an ordinary Maven build on the complete SWT repository (or you can probably also create it manually).
+Then you can execute the following within the folder of the fragment you want to build"
+
+
+To build eclipse.platform.swt first:
+
+1. cd eclipse.platform.swt
+2. mvn clean generate-resources -Dnative=cocoa.macosx.aarch64 -DskipTests
+
+
+To build the *.jnilib binaries for Mac aarch64:
+
+1. cd eclipse.platform.swt/binaries/org.eclipse.swt.cocoa.macosx.aarch64
+2. mvn clean process-resources -Dnative=cocoa.macosx.aarch64 -DskipTests
+
+(For windows it would be -Dnative=win32.win32.x86_64)
