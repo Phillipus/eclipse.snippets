@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.TableItem;
 public class MacTableItemHeight {
 
     public static void main(String[] args) {
-        //System.setProperty("org.eclipse.swt.internal.cocoa.enforceNativeItemHeightMinimum", "false");
+        //System.setProperty("org.eclipse.swt.internal.cocoa.useNativeItemHeight", "false");
         //System.setProperty("org.eclipse.swt.internal.carbon.smallFonts", "");
         
         Display display = new Display();

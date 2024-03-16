@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
  * Works OK on macOS 13
  * See https://github.com/eclipse-platform/eclipse.platform.swt/issues/1107
  */
-public class ScaleControlNotShowingMacOS14 {
+public class MacScaleControlNotShowingMacOS14 {
     
     public static void main(String[] args) {
         final Display display = new Display();
