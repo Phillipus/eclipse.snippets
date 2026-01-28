@@ -12,50 +12,42 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
 
 import utils.Utils;
 
 /**
- * Scaling Delay on Windows
- * See https://github.com/eclipse-gef/gef-classic/issues/983
+ * Scaling Issue on Windows
+ * See https://github.com/eclipse-gef/gef-classic/issues/993
  */
-public class ScalingDelay {
+public class ScalingTest2 {
     
     private static ScalableFigure scalable;
     
     public static void main(String[] args) {
-        // Setting either of these to false = no delay
         System.setProperty(Utils.SWT_AUTOSCALE_UPDATE_ON_RUNTIME, "true");
         System.setProperty(Utils.DRAW2D_ENABLE_AUTOSCALE, "true");
         
         Shell shell = new Shell();
         shell.setLayout(new GridLayout());
-        shell.setBounds(100, 100, 1000, 600);
+        shell.setBounds(100, 100, 600, 400);
         
-        Composite comp = new Composite(shell, 0);
-        comp.setLayout(new GridLayout(2, false));
-        GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(comp);
-        
-        Label label = new Label(comp, 0);
-        label.setText("Scale:");
-        
-        Spinner scaleSpinner = new Spinner(comp, 0);
-        scaleSpinner.setMinimum(1);
-        scaleSpinner.setMaximum(8);
-        scaleSpinner.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
-            scalable.setScale(scaleSpinner.getSelection());
+        Button button = new Button(shell, 0);
+        button.setText("Repaint");
+        button.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
+            scalable.repaint();
         }));
         
         GraphicalViewer viewer = new GraphicalViewerImpl();
-        viewer.setControl(shell);
+        
+        Canvas canvas = new Canvas(shell, 0);
+        GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+        viewer.setControl(canvas);
 
         ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
         viewer.setRootEditPart(rootEditPart);
@@ -79,7 +71,7 @@ public class ScalingDelay {
             
             IFigure box = new Figure();
             box.setOpaque(true);
-            box.setBackgroundColor(new Color(181, 255, 255));
+            box.setBackgroundColor(new Color(255, 125, 125));
             box.setBounds(new Rectangle(0, 0, 80, 80));
             layer.add(box);
             

@@ -10,9 +10,11 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -36,6 +38,10 @@ public class XORMode {
         GraphicalViewer viewer = new GraphicalViewerImpl();
         ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
         viewer.setRootEditPart(rootEditPart);
+        
+        Canvas canvas = new Canvas(shell, 0);
+        GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+        viewer.setControl(canvas);
 
         MainEditPart mainEditPart = new MainEditPart();
         rootEditPart.setContents(mainEditPart);
@@ -45,7 +51,6 @@ public class XORMode {
         mainEditPart.getFigure().add(figure);
         
         shell.open();
-        viewer.setControl(shell);
         
         while(!shell.isDisposed()) {
             if(!display.readAndDispatch()) {
@@ -58,7 +63,7 @@ public class XORMode {
         @Override
         protected void paintFigure(Graphics graphics) {
             graphics.setBackgroundColor(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
-            graphics.fillRectangle(5,5,90,45);
+            graphics.fillRectangle(5, 5, 90, 45);
             
             graphics.setXORMode(true);
             graphics.setAdvanced(false);

@@ -14,10 +14,11 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import utils.Utils;
@@ -36,9 +37,11 @@ public class TextFlowIssue {
         shell.setSize(400, 300);
         Display display = shell.getDisplay();
         
-        new Label(shell, 0); // adding this forces relayout
-        
         GraphicalViewer viewer = new GraphicalViewerImpl();
+        
+        Canvas canvas = new Canvas(shell, 0);
+        GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+        viewer.setControl(canvas);
         
         ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
         viewer.setRootEditPart(rootEditPart);
@@ -51,7 +54,6 @@ public class TextFlowIssue {
         textFigure.setText("External Business Services");
         mainEditPart.getFigure().add(textFigure);
         
-        viewer.setControl(shell);
         shell.open();
         
         while(!shell.isDisposed()) {

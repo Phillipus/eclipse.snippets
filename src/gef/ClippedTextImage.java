@@ -17,6 +17,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -27,6 +28,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.internal.DPIUtil;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -48,6 +50,10 @@ public class ClippedTextImage {
         
         GraphicalViewer viewer = new GraphicalViewerImpl();
         
+        Canvas canvas = new Canvas(shell, 0);
+        GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+        viewer.setControl(canvas);
+        
         Button button = new Button(shell, SWT.PUSH);
         button.setText("Create Image");
         button.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
@@ -65,7 +71,6 @@ public class ClippedTextImage {
         textFigure.setText("External Business Services");
         mainEditPart.getFigure().add(textFigure);
         
-        viewer.setControl(shell);
         shell.open();
         
         while(!shell.isDisposed()) {

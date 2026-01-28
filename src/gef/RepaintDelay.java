@@ -9,10 +9,12 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Shell;
 
 import utils.Utils;
@@ -40,11 +42,13 @@ public class RepaintDelay {
         button.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
             Color randomColor = new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
             boxFigure.setBackgroundColor(randomColor);
-            rootEditPart.getFigure().repaint();
         }));
         
         GraphicalViewer viewer = new GraphicalViewerImpl();
-        viewer.setControl(shell);
+
+        Canvas canvas = new Canvas(shell, 0);
+        GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+        viewer.setControl(canvas);
 
         rootEditPart = new ScalableFreeformRootEditPart();
         viewer.setRootEditPart(rootEditPart);
