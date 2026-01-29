@@ -16,20 +16,17 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.internal.DPIUtil;
-import org.eclipse.swt.program.Program;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import utils.Utils;
 
 /**
- * Text is clipped when exporting to Image
+ * Text is clipped when creating Image
  * @see https://github.com/eclipse-gef/gef-classic/issues/977
  */
 public class SimpleClippedTextImage {
@@ -41,48 +38,74 @@ public class SimpleClippedTextImage {
     }
     
     SimpleClippedTextImage() {
-        Shell parentShell = new Shell();
+        Shell shell = new Shell();
+        shell.setText("Image Text Clipped");
+        shell.setLayout(new GridLayout());
+        shell.setSize(400, 300);
+        Display display = shell.getDisplay();
+        
+        Image image = createImageFromGraphicalViewer();
+        
+        shell.addPaintListener(e -> {
+            e.gc.drawImage(image, 0, 0);
+        });
+        
+        shell.open();
+        
+        while(!shell.isDisposed()) {
+            if(!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        
+        display.dispose();
+        image.dispose();
+    }
+    
+    Image createImageFromGraphicalViewer() {
+        Shell tmpShell = new Shell();
         
         GraphicalViewer viewer = new GraphicalViewerImpl();
-        viewer.setControl(parentShell);
+        viewer.setControl(tmpShell);
         
         MainEditPart mainEditPart = new MainEditPart();
         viewer.setContents(mainEditPart);
-        
-        TextFigure textFigure = new TextFigure();
-        textFigure.setBounds(new Rectangle(40, 40, 200, 80));
-        textFigure.setText("External Business Services");
-        mainEditPart.getFigure().add(textFigure);
-        
         viewer.flush();
         
-        createImage(viewer);
-        parentShell.dispose();
-    }
-    
-    @SuppressWarnings("restriction")
-    void createImage(GraphicalViewer viewer) {
         LayerManager layerManager = (LayerManager)viewer.getEditPartRegistry().get(LayerManager.ID);
         IFigure printableLayer = layerManager.getLayer(LayerConstants.PRINTABLE_LAYERS);
         
-        Image image = new Image(null, printableLayer.getBounds().width, printableLayer.getBounds().height);
+        Image image = new Image(tmpShell.getDisplay(), printableLayer.getBounds().width, printableLayer.getBounds().height);
         GC gc = new GC(image);
         SWTGraphics graphics = new SWTGraphics(gc);
         printableLayer.paint(graphics);
+        
         gc.dispose();
         graphics.dispose();
+        tmpShell.dispose();
         
-        ImageData imageData = image.getImageData(DPIUtil.getNativeDeviceZoom());
-        image.dispose();
-        
-        // Set image path here...
-        String imagePath = "C:/Users/Phillipus/Desktop/test.png";
-        
-        ImageLoader loader = new ImageLoader();
-        loader.data = new ImageData[] { imageData };
-        loader.save(imagePath, SWT.IMAGE_PNG);
-        
-        Program.launch(imagePath);
+        return image;
+    }
+    
+    static class MainEditPart extends AbstractGraphicalEditPart {
+        @Override
+        protected IFigure createFigure() {
+            FreeformLayer figure = new FreeformLayer();
+            figure.setOpaque(true);
+            figure.setBackgroundColor(new Color(255, 255, 255));
+            figure.setLayoutManager(new FreeformLayout());
+            
+            TextFigure textFigure = new TextFigure();
+            textFigure.setBounds(new Rectangle(40, 40, 200, 80));
+            textFigure.setText("External Business Services");
+            figure.add(textFigure);
+            
+            return figure;
+        }
+
+        @Override
+        protected void createEditPolicies() {
+        }
     }
     
     static class TextFigure extends Figure {
@@ -106,27 +129,6 @@ public class SimpleClippedTextImage {
         
         public void setText(String text) {
             textFlow.setText(text);
-        }
-    }    
-
-    static class MainEditPart extends AbstractGraphicalEditPart {
-        @Override
-        protected IFigure createFigure() {
-            FreeformLayer figure = new FreeformLayer();
-            figure.setOpaque(true);
-            figure.setBackgroundColor(new Color(255, 255, 255));
-            figure.setLayoutManager(new FreeformLayout());
-            
-            TextFigure textFigure = new TextFigure();
-            textFigure.setBounds(new Rectangle(40, 40, 200, 80));
-            textFigure.setText("External Business Services");
-            figure.add(textFigure);
-            
-            return figure;
-        }
-
-        @Override
-        protected void createEditPolicies() {
         }
     }
 }
