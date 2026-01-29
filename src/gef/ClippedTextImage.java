@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.internal.DPIUtil;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
@@ -34,31 +35,49 @@ import org.eclipse.swt.widgets.Shell;
 
 import utils.Utils;
 
+/**
+ * Text is clipped when exporting to Image
+ * @see https://github.com/eclipse-gef/gef-classic/issues/977
+ */
 public class ClippedTextImage {
     
     public static void main(String[] args) {
-        // Ensure this is set
         System.setProperty(Utils.SWT_AUTOSCALE_UPDATE_ON_RUNTIME, "true");
-        
-        // Drawd2d autoscale
         System.setProperty(Utils.DRAW2D_ENABLE_AUTOSCALE, "true");
-        
+        new ClippedTextImage();
+    }
+    
+    ClippedTextImage() {
         Shell shell = new Shell();
         shell.setLayout(new GridLayout());
         shell.setSize(400, 300);
         Display display = shell.getDisplay();
         
-        GraphicalViewer viewer = new GraphicalViewerImpl();
-        
         Canvas canvas = new Canvas(shell, 0);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
-        viewer.setControl(canvas);
-        
+        createGraphicalViewer(canvas);
+
         Button button = new Button(shell, SWT.PUSH);
         button.setText("Create Image");
         button.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
-            createImage(display, viewer);
+            Shell parentShell = new Shell();
+            GraphicalViewer viewer = createGraphicalViewer(parentShell);
+            createImage(viewer);
+            parentShell.dispose();
         }));
+        
+        shell.open();
+        
+        while(!shell.isDisposed()) {
+            if(!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+    }
+    
+    GraphicalViewer createGraphicalViewer(Canvas parent) {
+        GraphicalViewer viewer = new GraphicalViewerImpl();
+        viewer.setControl(parent);
         
         ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
         viewer.setRootEditPart(rootEditPart);
@@ -71,41 +90,31 @@ public class ClippedTextImage {
         textFigure.setText("External Business Services");
         mainEditPart.getFigure().add(textFigure);
         
-        shell.open();
+        viewer.flush();
         
-        while(!shell.isDisposed()) {
-            if(!display.readAndDispatch()) {
-                display.sleep();
-            }
-        }
+        return viewer;
     }
     
     @SuppressWarnings("restriction")
-    static void createImage(Display display, GraphicalViewer viewer) {
+    void createImage(GraphicalViewer viewer) {
         LayerManager layerManager = (LayerManager)viewer.getEditPartRegistry().get(LayerManager.ID);
         IFigure printableLayer = layerManager.getLayer(LayerConstants.PRINTABLE_LAYERS);
         
-        Image image = new Image(display, printableLayer.getBounds().width, printableLayer.getBounds().height);
+        Image image = new Image(null, printableLayer.getBounds().width, printableLayer.getBounds().height);
         GC gc = new GC(image);
         SWTGraphics graphics = new SWTGraphics(gc);
         printableLayer.paint(graphics);
         gc.dispose();
         graphics.dispose();
         
-        int imageDataZoom;
-        if(viewer.getProperty("monitorScale") instanceof Double scale) {
-            imageDataZoom = (int)(scale * 100);
-        }
-        else {
-            imageDataZoom = DPIUtil.getNativeDeviceZoom();
-        }
+        ImageData imageData = image.getImageData(DPIUtil.getNativeDeviceZoom());
+        image.dispose();
         
-        ImageData imageData = image.getImageData(imageDataZoom);
+        String imagePath = "C:/Users/Phillipus/Desktop/test.png";
         ImageLoader loader = new ImageLoader();
         loader.data = new ImageData[] { imageData };
-        loader.save("C:/Users/Phillipus/Desktop/test.png", SWT.IMAGE_PNG);
-        
-        image.dispose();
+        loader.save(imagePath, SWT.IMAGE_PNG);
+        Program.launch(imagePath);
     }
     
     static class TextFigure extends Figure {
