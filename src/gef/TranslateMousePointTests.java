@@ -11,7 +11,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Shell;
@@ -40,11 +39,8 @@ public class TranslateMousePointTests {
         GraphicalViewer viewer = new GraphicalViewerImpl();
         viewer.setControl(shell);
         
-        ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
-
         MainEditPart mainEditPart = new MainEditPart();
-        rootEditPart.setContents(mainEditPart);
+        viewer.setContents(mainEditPart);
         
         figure = new TestFigure();
         mainEditPart.getFigure().add(figure);

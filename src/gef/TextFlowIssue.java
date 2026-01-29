@@ -12,7 +12,6 @@ import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.graphics.Color;
@@ -43,16 +42,8 @@ public class TextFlowIssue {
         GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
         viewer.setControl(canvas);
         
-        ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
-
         MainEditPart mainEditPart = new MainEditPart();
-        rootEditPart.setContents(mainEditPart);
-        
-        TextFigure textFigure = new TextFigure();
-        textFigure.setBounds(new Rectangle(40, 40, 200, 80));
-        textFigure.setText("External Business Services");
-        mainEditPart.getFigure().add(textFigure);
+        viewer.setContents(mainEditPart);
         
         shell.open();
         
@@ -92,6 +83,12 @@ public class TextFlowIssue {
         protected IFigure createFigure() {
             FreeformLayer figure = new FreeformLayer();
             figure.setLayoutManager(new FreeformLayout());
+            
+            TextFigure textFigure = new TextFigure();
+            textFigure.setBounds(new Rectangle(40, 40, 200, 80));
+            textFigure.setText("External Business Services");
+            figure.add(textFigure);
+            
             return figure;
         }
 

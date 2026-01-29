@@ -8,7 +8,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -36,15 +35,13 @@ public class XORMode {
         Display display = shell.getDisplay();
         
         GraphicalViewer viewer = new GraphicalViewerImpl();
-        ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
         
         Canvas canvas = new Canvas(shell, 0);
         GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
         viewer.setControl(canvas);
 
         MainEditPart mainEditPart = new MainEditPart();
-        rootEditPart.setContents(mainEditPart);
+        viewer.setContents(mainEditPart);
         
         SimpleFigure figure = new SimpleFigure();
         figure.setBounds(new Rectangle(10, 10, 300, 300));

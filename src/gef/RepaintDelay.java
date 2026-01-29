@@ -7,7 +7,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.events.SelectionListener;
@@ -25,7 +24,6 @@ import utils.Utils;
  */
 public class RepaintDelay {
     
-    private static ScalableFreeformRootEditPart rootEditPart;
     private static IFigure boxFigure;
     
     public static void main(String[] args) {
@@ -50,9 +48,7 @@ public class RepaintDelay {
         GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
         viewer.setControl(canvas);
 
-        rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
-        rootEditPart.setContents(new MainEditPart());
+        viewer.setContents(new MainEditPart());
         
         shell.open();
         

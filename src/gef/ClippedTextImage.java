@@ -15,7 +15,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.LayerManager;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -79,17 +78,8 @@ public class ClippedTextImage {
         GraphicalViewer viewer = new GraphicalViewerImpl();
         viewer.setControl(parent);
         
-        ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
-
         MainEditPart mainEditPart = new MainEditPart();
-        rootEditPart.setContents(mainEditPart);
-        
-        TextFigure textFigure = new TextFigure();
-        textFigure.setBounds(new Rectangle(40, 40, 200, 80));
-        textFigure.setText("External Business Services");
-        mainEditPart.getFigure().add(textFigure);
-        
+        viewer.setContents(mainEditPart);
         viewer.flush();
         
         return viewer;
@@ -148,6 +138,12 @@ public class ClippedTextImage {
             figure.setOpaque(true);
             figure.setBackgroundColor(new Color(255, 255, 255));
             figure.setLayoutManager(new FreeformLayout());
+            
+            TextFigure textFigure = new TextFigure();
+            textFigure.setBounds(new Rectangle(40, 40, 200, 80));
+            textFigure.setText("External Business Services");
+            figure.add(textFigure);
+            
             return figure;
         }
 

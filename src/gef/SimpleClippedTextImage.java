@@ -15,7 +15,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.LayerManager;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -47,11 +46,8 @@ public class SimpleClippedTextImage {
         GraphicalViewer viewer = new GraphicalViewerImpl();
         viewer.setControl(parentShell);
         
-        ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
-        viewer.setRootEditPart(rootEditPart);
-
         MainEditPart mainEditPart = new MainEditPart();
-        rootEditPart.setContents(mainEditPart);
+        viewer.setContents(mainEditPart);
         
         TextFigure textFigure = new TextFigure();
         textFigure.setBounds(new Rectangle(40, 40, 200, 80));
@@ -120,6 +116,12 @@ public class SimpleClippedTextImage {
             figure.setOpaque(true);
             figure.setBackgroundColor(new Color(255, 255, 255));
             figure.setLayoutManager(new FreeformLayout());
+            
+            TextFigure textFigure = new TextFigure();
+            textFigure.setBounds(new Rectangle(40, 40, 200, 80));
+            textFigure.setText("External Business Services");
+            figure.add(textFigure);
+            
             return figure;
         }
 
