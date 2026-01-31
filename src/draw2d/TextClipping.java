@@ -17,6 +17,12 @@ import utils.Utils;
 
 /**
  * TextClipping
+ * 
+ * 1. Set display scale to 150%
+ * 2. Run this snippet
+ * 3. Keep snippet open and set display scale to 200%
+ * 4. Text is clipped
+ * 
  * See https://github.com/eclipse-gef/gef-classic/issues/957
  */
 public class TextClipping {
@@ -49,6 +55,7 @@ public class TextClipping {
         
         Display display = new Display();
         Shell shell = new Shell(display);
+        shell.setText("Text Clipping scaling");
         shell.setLayout(new FillLayout());
         shell.setBounds(400, 400, 300, 300);
 
