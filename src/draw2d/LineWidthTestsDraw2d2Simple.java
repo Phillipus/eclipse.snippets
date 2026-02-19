@@ -6,6 +6,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,7 +20,7 @@ import org.eclipse.swt.widgets.Spinner;
  */
 public class LineWidthTestsDraw2d2Simple {
     
-    static double scale = 1.0;
+    static int layeredPaneScale = 1;
     static int lineWidth = 1;
     static ScalableFreeformLayeredPane layeredPane;
     
@@ -72,8 +73,8 @@ public class LineWidthTestsDraw2d2Simple {
         scaleSpinner.setMinimum(1);
         scaleSpinner.setMaximum(8);
         scaleSpinner.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
-            scale = scaleSpinner.getSelection();
-            layeredPane.setScale(scale);
+            layeredPaneScale = scaleSpinner.getSelection();
+            layeredPane.setScale(layeredPaneScale);
         }));
         
         label = new Label(shell, 0);
@@ -92,7 +93,18 @@ public class LineWidthTestsDraw2d2Simple {
         GridDataFactory.defaultsFor(fc).span(2, 1).applyTo(fc);
         
         layeredPane = new ScalableFreeformLayeredPane();
+        layeredPane.setOpaque(true);
+        layeredPane.setBackgroundColor(new Color(255, 255, 255));
         fc.setContents(layeredPane);
+        
+        fc.addListener(SWT.MouseVerticalWheel, e -> {
+            if((e.stateMask & SWT.MOD1) != 0) {
+                layeredPaneScale += e.count < 0 ? -1 : 1;
+                layeredPaneScale = Math.clamp(layeredPaneScale, 1, 8);
+                layeredPane.setScale(layeredPaneScale);
+                scaleSpinner.setSelection(layeredPaneScale);
+            }
+        });
         
         TestFigure textFigure = new TestFigure();
         textFigure.setBounds(new Rectangle(5, 5, 120, 55));

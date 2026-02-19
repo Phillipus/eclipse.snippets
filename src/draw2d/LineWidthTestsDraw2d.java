@@ -23,7 +23,7 @@ import utils.Utils;
  */
 public class LineWidthTestsDraw2d {
     
-    static double scale = 1.0;
+    static int layeredPaneScale = 1;
     static int lineWidth = 1;
     static ScalableFreeformLayeredPane layeredPane;
     
@@ -36,13 +36,9 @@ public class LineWidthTestsDraw2d {
         @Override
         protected void paintFigure(Graphics graphics) {
             graphics.fillRectangle(getBounds());
-            
             graphics.setLineWidth(lineWidth);
-            
             Rectangle rect = getBounds().getCopy();
-           
             setLineWidthAdjustment(graphics, lineWidth, rect);
-            
             graphics.drawRectangle(rect);
         }
         
@@ -97,8 +93,8 @@ public class LineWidthTestsDraw2d {
         scaleSpinner.setMinimum(1);
         scaleSpinner.setMaximum(8);
         scaleSpinner.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
-            scale = scaleSpinner.getSelection();
-            layeredPane.setScale(scale);
+            layeredPaneScale = scaleSpinner.getSelection();
+            layeredPane.setScale(layeredPaneScale);
         }));
         
         label = new Label(shell, 0);
@@ -115,6 +111,15 @@ public class LineWidthTestsDraw2d {
         
         FigureCanvas fc = new FigureCanvas(shell);
         GridDataFactory.defaultsFor(fc).span(2, 1).applyTo(fc);
+        
+        fc.addListener(SWT.MouseVerticalWheel, e -> {
+            if((e.stateMask & SWT.MOD1) != 0) {
+                layeredPaneScale += e.count < 0 ? -1 : 1;
+                layeredPaneScale = Math.clamp(layeredPaneScale, 1, 8);
+                layeredPane.setScale(layeredPaneScale);
+                scaleSpinner.setSelection(layeredPaneScale);
+            }
+        });
         
         layeredPane = new ScalableFreeformLayeredPane();
         layeredPane.setOpaque(true);
