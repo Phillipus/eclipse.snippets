@@ -1,5 +1,6 @@
 package draw2d;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.RectangleFigure;
@@ -26,9 +27,11 @@ public class LineDashesDraw2d {
         shell.setSize(300, 300);
 
         FigureCanvas fc = new FigureCanvas(shell);
-        RectangleFigure root = new RectangleFigure();
+        
+        Figure root = new Figure();
+        root.setOpaque(true);
         root.setBackgroundColor(new Color(null, 255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(root);
+        fc.setContents(root);
         
         RectangleFigure rectFigure = new RectangleFigure();
         rectFigure.setBounds(new Rectangle(10, 10, 250, 150));

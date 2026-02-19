@@ -64,7 +64,7 @@ public class TextClipping {
         Figure root = new Figure();
         root.setOpaque(true);
         root.setBackgroundColor(new Color(255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(root);
+        fc.setContents(root);
         
         SimpleTextFigure textFigure = new SimpleTextFigure();
         textFigure.setBounds(new Rectangle(20, 40, 200, 55));

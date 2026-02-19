@@ -92,7 +92,7 @@ public class LineWidthTestsDraw2d2Simple {
         GridDataFactory.defaultsFor(fc).span(2, 1).applyTo(fc);
         
         layeredPane = new ScalableFreeformLayeredPane();
-        fc.getLightweightSystem().getRootFigure().add(layeredPane);
+        fc.setContents(layeredPane);
         
         TestFigure textFigure = new TestFigure();
         textFigure.setBounds(new Rectangle(5, 5, 120, 55));

@@ -38,11 +38,10 @@ public class GradientTest {
         // Set to true to use Scaledgraphics and the gridient will be correct
         //ScalableFreeformLayeredPane layeredPane = new ScalableFreeformLayeredPane(true);
         ScalableFreeformLayeredPane layeredPane = new ScalableFreeformLayeredPane();
-        
         layeredPane.setOpaque(true);
         layeredPane.setBackgroundColor(new Color(255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(layeredPane);
-        
+        fc.setContents(layeredPane);
+
         // Set scale
         layeredPane.setScale(2.0);
         

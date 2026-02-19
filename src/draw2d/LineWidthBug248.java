@@ -44,7 +44,7 @@ public class LineWidthBug248 {
         };
         
         rectFigure.setBounds(new Rectangle(10, 10, 250, 150));
-        fc.getLightweightSystem().getRootFigure().add(rectFigure);
+        fc.setContents(rectFigure);
 
         shell.open();
         

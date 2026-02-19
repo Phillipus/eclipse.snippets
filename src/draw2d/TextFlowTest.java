@@ -158,7 +158,7 @@ public class TextFlowTest {
         Figure root = new Figure();
         root.setOpaque(true);
         root.setBackgroundColor(new Color(255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(root);
+        fc.setContents(root);
         
         TextControlContainerFigure textFigure = new TextControlContainerFigure();
         textFigure.setBounds(new Rectangle(80, 40, 124, 55));

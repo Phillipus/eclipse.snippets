@@ -33,7 +33,7 @@ public class MacEmojiTextHeight {
         Figure rootFigure = new Figure();
         rootFigure.setOpaque(true);
         rootFigure.setBackgroundColor(new Color(255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(rootFigure);
+        fc.setContents(rootFigure);
         
         // XY Layout
         rootFigure.setLayoutManager(new XYLayout());

@@ -118,8 +118,8 @@ public class LineWidthTestsDraw2d {
         
         layeredPane = new ScalableFreeformLayeredPane();
         layeredPane.setOpaque(true);
-        //root.setBackgroundColor(new Color(255, 255, 255));
-        fc.getLightweightSystem().getRootFigure().add(layeredPane);
+        layeredPane.setBackgroundColor(new Color(255, 255, 255));
+        fc.setContents(layeredPane);
         
         TestFigure textFigure = new TestFigure();
         textFigure.setBounds(new Rectangle(5, 5, 120, 55));
