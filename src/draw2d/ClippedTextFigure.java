@@ -1,15 +1,14 @@
 package draw2d;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.ImagePrintFigureOperation;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -38,19 +37,7 @@ public class ClippedTextFigure {
         figure.setText("External Business Services");
         figure.validate();
         
-// Use ImageGcDrawer
-//        Image image = new Image(display, (gc, width, height) -> {
-//            SWTGraphics graphics = new SWTGraphics(gc);
-//            figure.paint(graphics);
-//            graphics.dispose();
-//        }, 200, 80);
-        
-        Image image = new Image(display, 200, 80);
-        GC gc = new GC(image);
-        SWTGraphics graphics = new SWTGraphics(gc);
-        figure.paint(graphics);
-        graphics.dispose();
-        gc.dispose();
+        Image image = new ImagePrintFigureOperation(shell, figure).run();
         
         shell.addPaintListener(e -> {
             e.gc.drawImage(image, 10, 10);

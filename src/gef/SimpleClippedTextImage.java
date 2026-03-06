@@ -4,6 +4,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.ImagePrintFigureOperation;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.draw2d.StackLayout;
@@ -20,6 +21,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -44,7 +46,9 @@ public class SimpleClippedTextImage {
         shell.setSize(400, 300);
         Display display = shell.getDisplay();
         
-        Image image = createImageFromGraphicalViewer();
+        Shell tmp = new Shell();
+        
+        Image image = createImageFromGraphicalViewer2(tmp);
         
         shell.addPaintListener(e -> {
             e.gc.drawImage(image, 0, 0);
@@ -58,6 +62,7 @@ public class SimpleClippedTextImage {
             }
         }
         
+        tmp.dispose();
         display.dispose();
         image.dispose();
     }
@@ -85,6 +90,20 @@ public class SimpleClippedTextImage {
         tmpShell.dispose();
         
         return image;
+    }
+    
+    Image createImageFromGraphicalViewer2(Canvas parent) {
+        GraphicalViewer viewer = new GraphicalViewerImpl();
+        viewer.setControl(parent);
+        
+        MainEditPart mainEditPart = new MainEditPart();
+        viewer.setContents(mainEditPart);
+        viewer.flush();
+        
+        LayerManager layerManager = (LayerManager)viewer.getEditPartRegistry().get(LayerManager.ID);
+        IFigure printableLayer = layerManager.getLayer(LayerConstants.PRINTABLE_LAYERS);
+        
+        return new ImagePrintFigureOperation(parent, printableLayer).run();
     }
     
     static class MainEditPart extends AbstractGraphicalEditPart {
