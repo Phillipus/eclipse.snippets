@@ -24,7 +24,7 @@ public class GCRegressionTestDraw2d {
 
         FigureCanvas fc = new FigureCanvas(shell);
         RectangleFigure root = new RectangleFigure();
-        root.setBackgroundColor(new Color(null, 255, 255, 255));
+        root.setBackgroundColor(new Color(255, 255, 255));
         fc.setContents(root);
         
         RectangleFigure rectFigure = new RectangleFigure();

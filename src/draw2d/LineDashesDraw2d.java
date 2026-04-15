@@ -30,7 +30,7 @@ public class LineDashesDraw2d {
         
         Figure root = new Figure();
         root.setOpaque(true);
-        root.setBackgroundColor(new Color(null, 255, 255, 255));
+        root.setBackgroundColor(new Color(255, 255, 255));
         fc.setContents(root);
         
         RectangleFigure rectFigure = new RectangleFigure();
